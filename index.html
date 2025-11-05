@@ -3,135 +3,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <h1>Universita Di Corsica - Pascal Paoli</h1>
-
+    <title>Master2 CS Students - Università Di Corsica</title>
     <style>
-        body {
-            font-family: 'Segoe UI Emoji', 'Segoe UI', sans-serif;
-            background: #f0f4ff;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #e8edf2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
             text-align: center;
+            margin-bottom: 50px;
+            color: #2d3748;
         }
 
         h1 {
-            color: #1d4ed8;
-            margin-bottom: 30px;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* plus petit que 120px */
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
         }
 
         .card {
-            background: white;
-            border-radius: 15px;
-            padding: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
-        .card img {
+        .card-image {
             width: 100%;
-            aspect-ratio: 1 / 1; /* carré parfait */
+            height: 280px;
             object-fit: cover;
-            border-radius: 10px;
+            background: #34495e;
         }
 
-        .card p {
-            margin: 5px 0 0;
-            font-weight: bold;
-            font-size: 14px;
+        .card-content {
+            padding: 20px;
+            text-align: center;
         }
 
+        .card-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .card-role {
+            font-size: 0.95rem;
+            color: #718096;
+            margin-bottom: 12px;
+        }
+
+        .card-flag {
+            font-size: 2rem;
+        }
+
+        /* Modal */
         .modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
         }
 
         .modal-content {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            max-width: 400px;      /* réduit la largeur */
-            max-height: 90vh;       /* ne dépasse pas 90% de la hauteur de l’écran */
-            overflow-y: auto;       /* scroll si le contenu est trop grand */
-            text-align: left;
-            position: relative;
-}
-
-        .modal-content img {
+            border-radius: 24px;
+            max-width: 600px;
             width: 100%;
-            height: auto;
-            max-height: 200px;  
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            position: relative;
+            height: 300px;
+            background: #34495e;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            border-radius: 10px;
         }
 
         .close-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #1d4ed8;
-            color: white;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.9);
             border: none;
-            border-radius: 10px;
+            border-radius: 50%;
             cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
         }
 
-        .flag-img {
-            width: 20px;       /* largeur fixe du drapeau */
-            height: 20px;      /* hauteur proportionnelle */
-            vertical-align: middle;
-            margin-left: 5px;
-    }
+        .close-btn:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .modal-role {
+            font-size: 1.1rem;
+            color: #3498db;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #718096;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-content {
+            font-size: 0.95rem;
+            color: #4a5568;
+            line-height: 1.6;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .fun-fact {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 12px;
+            font-style: italic;
+            color: #4a5568;
+            border-left: 4px solid #95a5a6;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            color: #4a5568;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        footer p {
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
+
+        .footer-links {
+            margin-top: 15px;
+        }
+
+        .footer-links a {
+            color: #3498db;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>🎓 Università Di Corsica</h1>
+            <p class="subtitle">Master 2 Computer Science • Class of 2025</p>
+        </header>
 
-<h1>Meet our Master2 Computer science students! </h1>
-<p class="subtitle">Class Members Directory</p>
+        <div class="grid" id="studentsGrid"></div>
 
-
-
-    <div class="grid" id="membersGrid">
-        <!-- Les cartes des étudiants seront ajoutées par JS -->
+        <footer>
+            <div class="footer-logo">🎓</div>
+            <p><strong>Università Di Corsica - Pasquale Paoli</strong></p>
+            <p>Master 2 Computer Science • Promotion 2025</p>
+            <div class="footer-links">
+                <a href="https://www.univ-corse.fr" target="_blank">Site officiel</a>
+                <a href="mailto:contact@univ-corse.fr">Contact</a>
+                <a href="#">Mentions légales</a>
+            </div>
+            <p style="margin-top: 20px; font-size: 0.85rem; color: #718096;">
+                © 2025 Università Di Corsica. Tous droits réservés.
+            </p>
+        </footer>
     </div>
 
-    <!-- Modal pour profil détaillé -->
-    <div class="modal" id="profileModal">
-        <div class="modal-content" id="modalContent">
-            <img id="modalImg" src="" alt="">
-            <h2 id="modalName"></h2>
-            <p id="modalRole"></p>
-            <p><strong>Age:</strong> <span id="modalAge"></span></p>
-            <p><strong>Date of Birth:</strong> <span id="modalDob"></span></p>
-            <p>
-        <strong>Place:</strong> <span id="modalPlace"></span><br>
-        <strong>Nationality:</strong> <span id="modalNationality"></span> <img id="modalFlag" class="flag-img" src="" alt="Flag">
-</p>
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img id="modalImage" class="modal-image" src="" alt="">
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <h2 class="modal-title" id="modalName"></h2>
+                <div class="modal-role" id="modalRole"></div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Age</span>
+                        <span class="info-value" id="modalAge"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Date of Birth</span>
+                        <span class="info-value" id="modalDob"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Place</span>
+                        <span class="info-value" id="modalPlace"></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Nationality</span>
+                        <span class="info-value" id="modalNationality"></span>
+                    </div>
+                </div>
 
+                <div class="section">
+                    <div class="section-title">💪 Strengths</div>
+                    <div class="section-content" id="modalStrengths"></div>
+                </div>
 
-            <p><strong>Strengths:</strong> <span id="modalStrengths"></span></p>
-            <p><strong>Weaknesses:</strong> <span id="modalWeaknesses"></span></p>
-            <p><strong>Biggest Achievement:</strong> <span id="modalAchievement"></span></p>
-            <button class="close-btn" onclick="closeModal()">Back</button>
+                <div class="section">
+                    <div class="section-title">🎯 Areas for Growth</div>
+                    <div class="section-content" id="modalWeaknesses"></div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🏆 Biggest Achievement</div>
+                    <div class="section-content" id="modalAchievement"></div>
+                </div>
+
+                <div class="fun-fact" id="modalFunFact"></div>
+            </div>
         </div>
     </div>
 
@@ -143,88 +382,108 @@
                 role: "Étudiante / Data & AI",
                 age: 25,
                 dob: "01/10/2000",
-                place_of_birth : "Casablanca, Morocco",
-                nationality: "Casablanca, Morocco",
-                flag: "flagMA.png",
-                strengths: "I’m really good at data analysis and AI development, especially using Python and SQL. I genuinely enjoy working on data-driven solutions, building AI models, and applying machine learning to real-world problems. I like exploring new approaches in AI and computer vision, and I get the most satisfaction when I can mix technical skills with creative problem-solving. I’ve worked on end-to-end AI projects, from cleaning and preparing data to choosing models and deploying them. I’m also always learning new tools and techniques to stay up-to-date in the fast-moving world of AI and data science.",
-                weaknesses: "Even though I’m comfortable with Python, SQL, and AI frameworks, I’m still learning some of the other popular programming languages and tools. I’m also working on getting better at collaborative coding, especially with Git and team workflows. I see these as areas where I can improve, and I’m committed to learning and growing in these skills.",
-                achievement: "During my master’s internship, I developed an AI platform for a Moroccan company to check in real time whether workers were wearing their Personal Protective Equipment (PPE). I handled the whole AI pipeline, from gathering and processing the data to training and deploying the model. After testing different options, I found that YOLOv8 gave the best results for real-time detection. The project had a real impact on workplace safety and also helped me grow a lot in AI, computer vision, and real-time data processing. It was a great experience in taking a project from start to finish, solving problems along the way, and learning how to manage a complete AI project.",
-                fun_fact : "I love discovering how data can tell stories — and I believe a good dataset can be as fascinating as a novel!",
-                photo: "Hafsa_pic.jpeg" // Assurez-vous que l'image est dans le même dossier que ce HTML
-            },  
-
-            
-            { "id": "dahdouh-ahmed", "name": "DAHDOUH AHMED", "birthDate": "1998-03-16", "age": 27, "birthplace": "Algiers, Algeria", "nationality": "Algerian", "flag": "🇩🇿", "image": "/images/students/dahdouh-ahmed.jpg", "strengths": "Full Stack Development, Artificial Intelligence, FastAPI, Python, PostgreSQL, Software Architecture", "weaknesses": "Frontend design and advanced CSS styling", "achievement": "Developed a voice recognition system with 98% accuracy", "funFact": "Sports enthusiast and music lover", "description": "" },
-            
+                place: "Casablanca, Morocco",
+                nationality: "Moroccan",
+                flag: "🇲🇦",
+                photo: "images/Hafsa_pic.jpeg",
+                strengths: "I'm really good at data analysis and AI development, especially using Python and SQL. I genuinely enjoy working on data-driven solutions, building AI models, and applying machine learning to real-world problems.",
+                weaknesses: "I'm still learning some of the other popular programming languages and tools. I'm also working on getting better at collaborative coding, especially with Git and team workflows.",
+                achievement: "During my master's internship, I developed an AI platform for a Moroccan company to check in real time whether workers were wearing their Personal Protective Equipment (PPE).",
+                funFact: "I love discovering how data can tell stories — and I believe a good dataset can be as fascinating as a novel!"
+            },
+            {
+                name: "Ahmed Dahdouh",
+                role: "Full Stack Developer / AI",
+                age: 27,
+                dob: "16/03/1998",
+                place: "Algiers, Algeria",
+                nationality: "Algerian",
+                flag: "🇩🇿",
+                photo: "images/dahdouh-ahmed.jpg",
+                strengths: "Full Stack Development, Artificial Intelligence, FastAPI, Python, PostgreSQL, Software Architecture",
+                weaknesses: "Frontend design and advanced CSS styling",
+                achievement: "Developed a voice recognition system with 98% accuracy",
+                funFact: "Sports enthusiast and music lover"
+            },
             {
                 name: "Mehdi Ghoulam",
+                role: "Full Stack Developer",
                 age: 23,
-                date_of_birth: "2002-09-07",
-            
+                dob: "07/09/2002",
+                place: "France",
                 nationality: "French",
-                imageLink: "mehdi.png",
-                coding_strenghts: ["Typescript", "React", "React Native", "PHP", "Laravel", "API", "PostgreSQL"
-    ],
-    coding_weakness: ["Python"],
-    biggest_achievement_in_coding: "Co-founder of Mindlet 🐙",
-    interesting_fun_fact: "when it works, don't touch it!",
-        }
-
-        ,{
-    id: "antocreadev",
-    name: "Anthony Pierre Philippe Menghi",
-    age: 22,
-    date_of_birth: "2003-04-04",
-
-    nationality: "French",
-    imageLink: "anthony.png",
-    coding_strenghts: [
-        "Python", "AI", "Machine Learning", "FastAPI", "JavaScript", "TypeScript", "React", "Next.js"],
-    coding_weakness: [
-        "DevOps", "Kubernetes", "Docker"
-    ],
-    biggest_achievement_in_coding: "Co-founder of Mindlet 🐙",
-    interesting_fun_fact: "who runs, falls!"
-    }
-
+                flag: "🇫🇷",
+                photo: "images/med.png",
+                strengths: "TypeScript, React, React Native, PHP, Laravel, API, PostgreSQL",
+                weaknesses: "Python",
+                achievement: "Co-founder of Mindlet 🐙",
+                funFact: "When it works, don't touch it!"
+            },
+            {
+                name: "Anthony Pierre Philippe Menghi",
+                role: "AI Developer / Full Stack",
+                age: 22,
+                dob: "04/04/2003",
+                place: "France",
+                nationality: "French",
+                flag: "🇫🇷",
+                photo: "images/anto.jpg",
+                strengths: "Python, AI, Machine Learning, FastAPI, JavaScript, TypeScript, React, Next.js",
+                weaknesses: "DevOps, Kubernetes, Docker",
+                achievement: "Co-founder of Mindlet 🐙",
+                funFact: "Who runs, falls!"
+            }
         ];
 
-        const grid = document.getElementById("membersGrid");
-
-        // Afficher les cartes
-        students.forEach((s, index) => {
-            const card = document.createElement("div");
-            card.classList.add("card");
+        // Générer les cartes
+        const grid = document.getElementById('studentsGrid');
+        students.forEach((student, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
             card.innerHTML = `
-                <img src="${s.photo}" alt="${s.name}">
-                <p>${s.name} <img src="${s.flag}" class="flag-img" alt="Flag"></p>
+                <img class="card-image" src="${student.photo}" alt="${student.name}">
+                <div class="card-content">
+                    <div class="card-name">${student.name}</div>
+                    <div class="card-role">${student.role}</div>
+                    <div class="card-flag">${student.flag}</div>
+                </div>
             `;
-            card.addEventListener("click", () => openModal(index));
+            card.onclick = () => openModal(index);
             grid.appendChild(card);
         });
 
-        // Modal
-        const modal = document.getElementById("profileModal");
+        // Gestion de la modal
+        const modal = document.getElementById('modal');
 
         function openModal(index) {
             const s = students[index];
-            document.getElementById("modalImg").src = s.photo;
-            document.getElementById("modalName").innerText = s.name;
-            document.getElementById("modalRole").innerText = s.role;
-            document.getElementById("modalAge").innerText = s.age;
-            document.getElementById("modalDob").innerText = s.dob;
-            document.getElementById("modalPlace").innerText = s.place;
-            document.getElementById("modalFlag").src = s.flag;
-            document.getElementById("modalStrengths").innerText = s.strengths;
-            document.getElementById("modalWeaknesses").innerText = s.weaknesses;
-            document.getElementById("modalAchievement").innerText = s.achievement;
-            modal.style.display = "flex";
+            document.getElementById('modalImage').src = s.photo;
+            document.getElementById('modalName').textContent = s.name;
+            document.getElementById('modalRole').textContent = s.role;
+            document.getElementById('modalAge').textContent = s.age;
+            document.getElementById('modalDob').textContent = s.dob;
+            document.getElementById('modalPlace').textContent = s.place;
+            document.getElementById('modalNationality').textContent = `${s.nationality} ${s.flag}`;
+            document.getElementById('modalStrengths').textContent = s.strengths;
+            document.getElementById('modalWeaknesses').textContent = s.weaknesses;
+            document.getElementById('modalAchievement').textContent = s.achievement;
+            document.getElementById('modalFunFact').textContent = `💡 Fun Fact: ${s.funFact}`;
+            modal.classList.add('active');
         }
 
         function closeModal() {
-            modal.style.display = "none";
+            modal.classList.remove('active');
         }
-    </script>
 
+        // Fermer avec la touche Échap
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Fermer en cliquant en dehors
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    </script>
 </body>
 </html>
