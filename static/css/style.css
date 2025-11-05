@@ -1,0 +1,44 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f0f4ff, #dbeafe);
+    margin: 0;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #1d4ed8;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.card img {
+    width: 100%;
+    height: 200px; /* smaller height */
+    object-fit: cover; /* keeps aspect ratio */
+    border-radius: 10px;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.card img {
+    width: 100%;
+    height: 220px;        object-fit: cover;
+    border-radius: 10px;
+}
+
+.member-detail img {
+    width: 200px; /* smaller */
+    height: 200px; /* square */
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 20px 0;
+}
